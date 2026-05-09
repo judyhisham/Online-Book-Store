@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Admin Login - Online Bookstore</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}"/>
+    <style>
+        body { background: #1f2937; }
+        .auth-box { background: #fff; border-top: 5px solid #1e3a8a; }
+    </style>
+</head>
+<body>
+
+<main>
+    <div class="auth-wrapper" style="min-height:100vh;">
+        <div class="auth-box">
+            <h2>Admin Portal</h2>
+            <p class="subtitle">Restricted access. Authorized personnel only.</p>
+
+            <div th:if="${error}" class="alert alert-error" th:text="${error}"></div>
+
+            <form th:action="@{/admin/login}" method="post">
+                <div class="form-group">
+                    <label for="username">Username</label>
+                    <input id="username" name="username" type="text" required
+                           th:value="${username}" class="form-control"
+                           placeholder="Admin username"/>
+                </div>
+
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <input id="password" name="password" type="password" required
+                           class="form-control" placeholder="Admin password"/>
+                </div>
+
+                <button type="submit" class="btn btn-primary btn-block">Sign In</button>
+            </form>
+
+            <div class="auth-footer">
+                <a th:href="@{/login}">&larr; Back to user login</a>
+            </div>
+        </div>
+    </div>
+</main>
+
+</body>
+</html>

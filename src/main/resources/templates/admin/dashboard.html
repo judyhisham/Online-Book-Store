@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Admin Dashboard - Online Bookstore</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}"/>
+</head>
+<body>
+
+<header th:replace="~{fragments/layout :: adminNavbar('dashboard')}"></header>
+
+<main>
+    <div class="container">
+
+        <div th:replace="~{fragments/layout :: flash}"></div>
+
+        <div class="page-header">
+            <h1>Admin Dashboard</h1>
+            <p>Welcome back, <strong th:text="${session.admin.username}">admin</strong>.</p>
+        </div>
+
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="label">Total Books</div>
+                <div class="value" th:text="${totalBooks}">0</div>
+            </div>
+            <div class="stat-card alt">
+                <div class="label">Total Orders</div>
+                <div class="value" th:text="${totalOrders}">0</div>
+            </div>
+            <div class="stat-card red">
+                <div class="label">Low Stock Items</div>
+                <div class="value" th:text="${lowStockCount}">0</div>
+            </div>
+            <div class="stat-card green">
+                <div class="label">Inventory Value</div>
+                <div class="value" th:text="'$' + ${#numbers.formatDecimal(inventoryValue, 1, 0)}">$0</div>
+            </div>
+        </div>
+
+        <div class="flex gap-1 mb-3" style="flex-wrap:wrap;">
+            <a th:href="@{/admin/books/add}" class="btn btn-primary">+ Add Book</a>
+            <a th:href="@{/admin/books}" class="btn btn-secondary">Manage Books</a>
+            <a th:href="@{/admin/orders}" class="btn btn-secondary">View Orders</a>
+        </div>
+
+        <div class="card">
+            <h3 class="card-title">Recent Orders</h3>
+            <div th:if="${recentOrders.isEmpty()}" class="text-muted">No orders yet.</div>
+            <table th:if="${!recentOrders.isEmpty()}" class="table">
+                <thead>
+                    <tr>
+                        <th>Order #</th>
+                        <th>Customer</th>
+                        <th>Total</th>
+                        <th>Status</th>
+                        <th>Date</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="order : ${recentOrders}">
+                        <td><strong th:text="'#' + ${order.id}">#0</strong></td>
+                        <td th:text="${order.user.name}">Customer</td>
+                        <td th:text="'$' + ${#numbers.formatDecimal(order.totalPrice, 1, 2)}">$0.00</td>
+                        <td>
+                            <span class="badge"
+                                  th:classappend="${order.status.name() == 'PENDING' ? 'badge-pending' :
+                                                  (order.status.name() == 'CONFIRMED' ? 'badge-confirmed' :
+                                                  (order.status.name() == 'SHIPPED' ? 'badge-shipped' : 'badge-cancelled'))}"
+                                  th:text="${order.status}">PENDING</span>
+                        </td>
+                        <td th:text="${#temporals.format(order.createdAt, 'MMM dd, yyyy')}">--</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+    </div>
+</main>
+
+<footer th:replace="~{fragments/layout :: footer}"></footer>
+
+<script th:src="@{/js/main.js}"></script>
+</body>
+</html>
