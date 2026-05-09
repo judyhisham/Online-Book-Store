@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Contact Us - Online Bookstore</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}"/>
+</head>
+<body>
+
+<header th:replace="~{fragments/layout :: navbar}"></header>
+
+<main>
+    <div class="container">
+        <div class="page-header">
+            <h1>Contact Us</h1>
+            <p>We usually reply within 1 business day.</p>
+        </div>
+
+        <div class="two-col">
+            <div class="card">
+                <h3 class="card-title">Support Information</h3>
+                <p class="mb-1"><strong>Email:</strong> support@bookstore.com</p>
+                <p class="mb-1"><strong>Phone:</strong> +1 (555) 010-2304</p>
+                <p class="mb-1"><strong>Address:</strong> 2304 Bookstore Avenue, Reading City</p>
+                <p class="mb-1"><strong>Hours:</strong> Mon-Fri 9:00am - 6:00pm</p>
+            </div>
+
+            <div class="card">
+                <h3 class="card-title">How can we help?</h3>
+                <p class="mb-1">For order questions, include your order number from <strong>My Orders</strong>.</p>
+                <p class="mb-1">For account issues, include the email used during registration.</p>
+                <p class="mb-2">For policy questions, see our
+                    <a th:href="@{/privacy}">Privacy Policy</a> and
+                    <a th:href="@{/terms}">Terms</a>.
+                </p>
+                <a th:href="@{/catalog}" class="btn btn-primary">Back to Catalog</a>
+            </div>
+        </div>
+
+    </div>
+</main>
+
+<footer th:replace="~{fragments/layout :: footer}"></footer>
+
+<script th:src="@{/js/main.js}"></script>
+</body>
+</html>

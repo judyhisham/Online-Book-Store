@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>My Orders - Online Bookstore</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}"/>
+</head>
+<body>
+
+<header th:replace="~{fragments/layout :: navbar}"></header>
+
+<main>
+    <div class="container">
+
+        <div th:replace="~{fragments/layout :: flash}"></div>
+
+        <div class="page-header">
+            <h1>My Orders</h1>
+            <p>View your order history and order status.</p>
+        </div>
+
+        <div th:if="${orders.isEmpty()}" class="empty-state">
+            <div class="icon">&#128221;</div>
+            <h2>No orders yet</h2>
+            <p>You haven't placed any orders. Start browsing the catalog!</p>
+            <a th:href="@{/catalog}" class="btn btn-primary">Browse Catalog</a>
+        </div>
+
+        <table th:if="${!orders.isEmpty()}" class="table">
+            <thead>
+                <tr>
+                    <th>Order #</th>
+                    <th>Date</th>
+                    <th>Items</th>
+                    <th>Total</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="order : ${orders}">
+                    <td><strong th:text="'#' + ${order.id}">#0</strong></td>
+                    <td th:text="${#temporals.format(order.createdAt, 'MMM dd, yyyy')}">--</td>
+                    <td th:text="${order.orderItems != null ? order.orderItems.size() : 0} + ' item(s)'">0 items</td>
+                    <td th:text="'$' + ${#numbers.formatDecimal(order.totalPrice, 1, 2)}">$0.00</td>
+                    <td>
+                        <span class="badge"
+                              th:classappend="${order.status.name() == 'PENDING' ? 'badge-pending' :
+                                              (order.status.name() == 'CONFIRMED' ? 'badge-confirmed' :
+                                              (order.status.name() == 'SHIPPED' ? 'badge-shipped' : 'badge-cancelled'))}"
+                              th:text="${order.status}">PENDING</span>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+
+    </div>
+</main>
+
+<footer th:replace="~{fragments/layout :: footer}"></footer>
+
+<script th:src="@{/js/main.js}"></script>
+</body>
+</html>

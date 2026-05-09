@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Privacy Policy - Online Bookstore</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}"/>
+</head>
+<body>
+
+<header th:replace="~{fragments/layout :: navbar}"></header>
+
+<main>
+    <div class="container">
+        <div class="page-header">
+            <h1>Privacy Policy</h1>
+            <p>Last updated: 2026</p>
+        </div>
+
+        <div class="card" style="line-height:1.7;">
+            <h3>1. Information We Collect</h3>
+            <p class="mb-2">We collect information that you provide directly to us such as your name, email address, and password when you create an account, and shipping/billing information when you place an order.</p>
+
+            <h3>2. How We Use Your Information</h3>
+            <p class="mb-2">We use your information to process orders, communicate with you, and improve our service. We do not sell your data to third parties.</p>
+
+            <h3>3. Data Security</h3>
+            <p class="mb-2">Passwords are hashed before being stored in our database. We use HTTPS for data in transit and follow industry-standard security practices.</p>
+
+            <h3>4. Cookies</h3>
+            <p class="mb-2">We use session cookies to keep you signed in while browsing the site. We do not use third-party tracking cookies.</p>
+
+            <h3>5. Your Rights</h3>
+            <p class="mb-2">You may request access to, correction of, or deletion of your personal data by contacting us through the Contact page.</p>
+
+            <h3>6. Contact</h3>
+            <p>If you have questions about this policy, please <a th:href="@{/contact}">contact us</a>.</p>
+        </div>
+
+    </div>
+</main>
+
+<footer th:replace="~{fragments/layout :: footer}"></footer>
+
+<script th:src="@{/js/main.js}"></script>
+</body>
+</html>
