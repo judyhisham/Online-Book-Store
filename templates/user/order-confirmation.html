@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Order Confirmed - Online Bookstore</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}"/>
+</head>
+<body>
+
+<header th:replace="~{fragments/layout :: navbar}"></header>
+
+<main>
+    <div class="container">
+
+        <div style="max-width: 600px; margin: 30px auto; text-align: center;">
+
+            <div class="confirm-icon">&#10003;</div>
+
+            <h1 style="color: #16a34a; margin-bottom: 8px;">Order Confirmed!</h1>
+            <p class="text-muted mb-3">Thank you for your purchase. Your order has been received and is being processed.</p>
+
+            <div class="card text-left mb-2" style="text-align: left;">
+                <h3 class="card-title">Order Details</h3>
+                <div class="summary-row">
+                    <span>Order Number</span>
+                    <strong th:text="'#' + ${order.id}">#0</strong>
+                </div>
+                <div class="summary-row">
+                    <span>Date</span>
+                    <span th:text="${#temporals.format(order.createdAt, 'MMM dd, yyyy HH:mm')}">--</span>
+                </div>
+                <div class="summary-row">
+                    <span>Status</span>
+                    <span class="badge badge-confirmed" th:text="${order.status}">CONFIRMED</span>
+                </div>
+                <div class="summary-row total">
+                    <span>Total Paid</span>
+                    <span th:text="'$' + ${#numbers.formatDecimal(order.totalPrice, 1, 2)}">$0.00</span>
+                </div>
+
+                <div th:if="${order.orderItems != null and !order.orderItems.isEmpty()}"
+                     style="margin-top:16px;border-top:1px solid #e5e7eb;padding-top:12px;">
+                    <p style="font-weight:600;margin-bottom:8px;">Items Ordered</p>
+                    <div th:each="item : ${order.orderItems}" class="summary-row">
+                        <span th:text="${item.book.title} + ' x ' + ${item.quantity}">Book x 1</span>
+                        <span th:text="'$' + ${#numbers.formatDecimal(item.unitPrice.doubleValue() * item.quantity, 1, 2)}">$0.00</span>
+                    </div>
+                </div>
+            </div>
+
+            <div th:if="${order.emailSent}" class="alert alert-info">
+                A confirmation email has been sent to <strong th:text="${session.user.email}">email</strong>.
+            </div>
+
+            <div class="flex gap-1" style="justify-content:center;flex-wrap:wrap;">
+                <a th:href="@{/my-orders}" class="btn btn-secondary">View My Orders</a>
+                <a th:href="@{/catalog}" class="btn btn-primary">Continue Shopping</a>
+            </div>
+
+        </div>
+
+    </div>
+</main>
+
+<footer th:replace="~{fragments/layout :: footer}"></footer>
+
+<script th:src="@{/js/main.js}"></script>
+</body>
+</html>

@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Catalog - Online Bookstore</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}"/>
+</head>
+<body>
+
+<header th:replace="~{fragments/layout :: navbar}"></header>
+
+<!-- Hero (only on homepage / no filter) -->
+<section th:if="${search == null and selectedCategory == null}" class="hero">
+    <div class="container">
+        <h1>Discover Your Next Favorite Book</h1>
+        <p>Browse thousands of titles across fiction, design, history, science and more. Quality books delivered to your door.</p>
+        <div class="hero-actions">
+            <a href="#catalog" class="btn btn-warning">Browse Catalog</a>
+            <a th:href="@{/register}" th:if="${session.user == null}" class="btn btn-secondary">Create Account</a>
+        </div>
+    </div>
+</section>
+
+<main>
+    <div class="container">
+
+        <div th:replace="~{fragments/layout :: flash}"></div>
+
+        <div id="catalog" class="page-header">
+            <h1 th:if="${search != null}">Search results for "<span th:text="${search}"></span>"</h1>
+            <h1 th:if="${selectedCategory != null and search == null}" th:text="${selectedCategory}">Category</h1>
+            <h1 th:if="${search == null and selectedCategory == null}">Book Catalog</h1>
+            <p>
+                <span th:text="${books.size()}">0</span> book(s) found
+                <span th:if="${search != null or selectedCategory != null}">
+                    - <a th:href="@{/catalog}">clear filter</a>
+                </span>
+            </p>
+        </div>
+
+        <!-- Toolbar: search + category -->
+        <div class="toolbar">
+            <form th:action="@{/catalog}" method="get" class="search-form">
+                <input type="text" name="search" class="form-control"
+                       th:value="${search}" placeholder="Search by title, author, category..."/>
+                <button type="submit" class="btn btn-primary">Search</button>
+            </form>
+
+            <form th:action="@{/catalog}" method="get">
+                <select name="category" class="form-control" onchange="this.form.submit()">
+                    <option value="">All Categories</option>
+                    <option th:each="cat : ${categories}" th:value="${cat}" th:text="${cat}"
+                            th:selected="${cat == selectedCategory}">Category</option>
+                </select>
+            </form>
+        </div>
+
+        <!-- Book grid -->
+        <div th:if="${!books.isEmpty()}" class="book-grid">
+            <div th:each="book : ${books}" class="book-card">
+                <div class="book-cover">
+                    <img th:if="${book.imageUrl != null and !#strings.isEmpty(book.imageUrl)}"
+                         th:src="${book.imageUrl}" th:alt="${book.title}"/>
+                    <span th:if="${book.imageUrl == null or #strings.isEmpty(book.imageUrl)}"
+                          class="placeholder">BOOK</span>
+                    <div th:if="${book.quantity == 0}" class="cover-overlay">Out of Stock</div>
+                </div>
+                <div class="book-info">
+                    <span th:if="${book.category}" class="book-category" th:text="${book.category}">Category</span>
+                    <h3 class="book-title" th:text="${book.title}">Book Title</h3>
+                    <p th:if="${book.author}" class="book-author" th:text="'by ' + ${book.author}">Author</p>
+                    <p th:if="${book.author == null}" class="book-author">Unknown author</p>
+
+                    <div class="book-stars">
+                        <span th:each="i : ${#numbers.sequence(1,5)}"
+                              th:classappend="${i > book.starRating} ? 'empty' : ''">&#9733;</span>
+                    </div>
+
+                    <div class="book-price"
+                         th:text="'$' + ${#numbers.formatDecimal(book.price, 1, 2)}">$0.00</div>
+
+                    <span th:if="${book.quantity == 0}" class="stock-tag stock-out">Out of stock</span>
+                    <span th:if="${book.quantity > 0 and book.quantity <= 5}"
+                          class="stock-tag stock-low"
+                          th:text="'Only ' + ${book.quantity} + ' left'">Low stock</span>
+                    <span th:if="${book.quantity > 5}" class="stock-tag stock-in">In stock</span>
+
+                    <div class="book-actions">
+                        <form th:if="${session.user != null and book.quantity > 0}"
+                              th:action="@{/cart/add}" method="post">
+                            <input type="hidden" name="bookId" th:value="${book.id}"/>
+                            <input type="hidden" name="quantity" value="1"/>
+                            <button type="submit" class="btn btn-primary btn-block">Add to Cart</button>
+                        </form>
+                        <a th:if="${session.user == null}" th:href="@{/login}"
+                           class="btn btn-secondary btn-block">Sign In to Buy</a>
+                        <button th:if="${session.user != null and book.quantity == 0}"
+                                disabled class="btn btn-secondary btn-block" style="opacity:0.5;cursor:not-allowed;">
+                            Unavailable
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Empty state -->
+        <div th:if="${books.isEmpty()}" class="empty-state">
+            <div class="icon">&#128269;</div>
+            <h2>No books found</h2>
+            <p>Try a different search term or browse all categories.</p>
+            <a th:href="@{/catalog}" class="btn btn-primary">Browse All Books</a>
+        </div>
+
+    </div>
+</main>
+
+<footer th:replace="~{fragments/layout :: footer}"></footer>
+
+<script th:src="@{/js/main.js}"></script>
+</body>
+</html>

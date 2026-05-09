@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Edit Book - Admin</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}"/>
+</head>
+<body>
+<header th:replace="~{fragments/layout :: adminNavbar('books')}"></header>
+<main>
+    <div class="container">
+        <div th:replace="~{fragments/layout :: flash}"></div>
+        <div class="page-header">
+            <h1>Edit Book</h1>
+            <p><a th:href="@{/admin/books}">&larr; Back to Books</a></p>
+        </div>
+
+        <div class="card" style="max-width: 640px;">
+            <form th:action="@{/admin/books/edit/{id}(id=${book.id})}" method="post">
+                <div class="form-group">
+                    <label>Title <span class="required">*</span></label>
+                    <input name="title" type="text" required class="form-control" th:value="${book.title}"/>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Author</label>
+                        <input name="author" type="text" class="form-control" th:value="${book.author}"/>
+                    </div>
+                    <div class="form-group">
+                        <label>Category</label>
+                        <input name="category" type="text" class="form-control" th:value="${book.category}"/>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>Description</label>
+                    <textarea name="description" class="form-control" rows="3" th:text="${book.description}"></textarea>
+                </div>
+                <div class="form-group">
+                    <label>Cover Image URL</label>
+                    <input name="imageUrl" type="url" class="form-control" th:value="${book.imageUrl}"/>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Price ($) <span class="required">*</span></label>
+                        <input name="price" type="number" step="0.01" min="0.01" required class="form-control" th:value="${book.price}"/>
+                    </div>
+                    <div class="form-group">
+                        <label>Quantity <span class="required">*</span></label>
+                        <input name="quantity" type="number" min="0" required class="form-control" th:value="${book.quantity}"/>
+                    </div>
+                    <div class="form-group">
+                        <label>Rating (0-5)</label>
+                        <input name="starRating" type="number" min="0" max="5" class="form-control" th:value="${book.starRating}"/>
+                    </div>
+                </div>
+                <div class="flex gap-1">
+                    <button type="submit" class="btn btn-primary">Save Changes</button>
+                    <a th:href="@{/admin/books}" class="btn btn-secondary">Cancel</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</main>
+<footer th:replace="~{fragments/layout :: footer}"></footer>
+<script th:src="@{/js/main.js}"></script>
+</body>
+</html>

@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title th:text="${pageTitle != null ? pageTitle + ' - Online Bookstore' : 'Online Bookstore'}">Online Bookstore</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}"/>
+</head>
+<body>
+
+<!-- Navbar fragment -->
+<header th:fragment="navbar" class="navbar">
+    <div class="container">
+        <a th:href="@{/catalog}" class="brand">
+            <span class="brand-icon">&#128218;</span> Online Bookstore
+        </a>
+        <ul class="nav-links">
+            <li><a th:href="@{/catalog}">Catalog</a></li>
+            <li th:if="${session.user != null}"><a th:href="@{/my-orders}">My Orders</a></li>
+            <li><a th:href="@{/contact}">Contact</a></li>
+            <li>
+                <a th:href="@{/cart}" class="nav-cart">
+                    Cart
+                    <span th:if="${cartCount != null and cartCount > 0}"
+                          th:text="${cartCount}" class="cart-badge">0</span>
+                </a>
+            </li>
+            <li th:if="${session.user != null}">
+                <span class="user-info">
+                    Hi, <strong th:text="${session.user.name}">User</strong>
+                    <a th:href="@{/logout}" class="logout">Logout</a>
+                </span>
+            </li>
+            <li th:if="${session.user == null}">
+                <a th:href="@{/login}">Sign In</a>
+            </li>
+            <li th:if="${session.user == null}">
+                <a th:href="@{/register}">Register</a>
+            </li>
+        </ul>
+    </div>
+</header>
+
+<!-- Footer fragment -->
+<footer th:fragment="footer">
+    <div class="container">
+        <p>&copy; 2026 Online Bookstore. All rights reserved.</p>
+        <p style="margin-top:6px;">
+            <a th:href="@{/privacy}">Privacy Policy</a>
+            <a th:href="@{/terms}">Terms of Service</a>
+            <a th:href="@{/contact}">Contact Us</a>
+        </p>
+    </div>
+</footer>
+
+<!-- Flash messages fragment -->
+<div th:fragment="flash">
+    <div th:if="${success}" class="alert alert-success" th:text="${success}"></div>
+    <div th:if="${error}" class="alert alert-error" th:text="${error}"></div>
+</div>
+
+<!-- Admin navbar fragment -->
+<header th:fragment="adminNavbar(active)" class="navbar" style="background: #111827;">
+    <div class="container">
+        <a th:href="@{/admin/dashboard}" class="brand">
+            <span class="brand-icon">&#128218;</span> Bookstore Admin
+        </a>
+        <ul class="nav-links">
+            <li><a th:href="@{/admin/dashboard}" th:classappend="${active == 'dashboard' ? 'active' : ''}">Dashboard</a></li>
+            <li><a th:href="@{/admin/books}" th:classappend="${active == 'books' ? 'active' : ''}">Books</a></li>
+            <li><a th:href="@{/admin/orders}" th:classappend="${active == 'orders' ? 'active' : ''}">Orders</a></li>
+            <li>
+                <span class="user-info">
+                    <span th:text="${session.admin != null ? session.admin.username : 'admin'}">admin</span>
+                    <a th:href="@{/admin/logout}" class="logout">Logout</a>
+                </span>
+            </li>
+        </ul>
+    </div>
+</header>
+
+</body>
+</html>
